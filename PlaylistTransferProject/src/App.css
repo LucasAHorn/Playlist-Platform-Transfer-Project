@@ -1,0 +1,26 @@
+body {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+    .LandingArea {
+    margin-right: auto;
+    margin-left: auto;
+}
+
+    .HorizontallyAligned {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.VerticallyAligned {
+    display: flex;
+    flex-direction: column;
+}
+
+.AnswerOptions {
+    margin: 1vh;
+}
