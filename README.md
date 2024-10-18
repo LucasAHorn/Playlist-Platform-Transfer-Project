@@ -32,7 +32,7 @@ Function of YoutubeToSpotify:
 Thank you to:
 
 - Alex Young (front-end)
-- <name here>
+- Kevin Dillenburg 
 - <name here>
 - <name here>
 - <name here>
