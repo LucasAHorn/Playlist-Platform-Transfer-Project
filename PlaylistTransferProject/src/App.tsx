@@ -6,25 +6,47 @@ function App() {
   const [token, setToken] = useState("");
 
   /**
-   * This function will redirect the user to the spotify login
-   * Then create the new playlist if token is valid **use rand to make the playlist name different every time**
-   * Then hopefully scrape the artist name and song name and find the closest match
-   *
+   * Async function to handle YouTube to Spotify transfer.
    */
-  function YoutubeToSpotify() {
-    console.log("YouTube to spotify");
-    console.log(playlistUrl);
-    console.log(token);
-    // window.open("https://" + newPlaylistUrl, "_blank")?.focus(); // TODO: use this to open the playlist after it is made
+  async function YoutubeToSpotify() {
+
+    // This tests is the input to url is "Lucas" and then prints it to terminal after a flask server checks for validity
+    try {
+      const response = await fetch('/api/YoutubeToSpotify', {  // Use correct API endpoint
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: playlistUrl }),  // Send the name to the backend
+      });
+
+      if (!response.ok) {
+        throw new Error('Request failed');
+      }
+
+      const data = await response.json();
+
+      // Check response data and log accordingly
+      if (data.functionSuccess === 1) {
+        console.log("Data successfully sent and received");
+      } else {
+        console.log("Data was wrong");
+      }
+
+    } catch (error) {
+      console.log('Error:', error);
+    }
   }
+
 
   /**
    * This will be implimented later
-   */
-  function SpotifyToYoutube() {
-    console.log("Spotify to Youtube");
-    console.log(playlistUrl);
-    console.log(token);
+  */
+ function SpotifyToYoutube() {
+   console.log("Spotify to Youtube");
+   console.log(playlistUrl);
+   console.log(token);
+   // window.open("https://" + newPlaylistUrl, "_blank")?.focus(); // TODO: use this to open the playlist after it is made
   }
 
   return (
