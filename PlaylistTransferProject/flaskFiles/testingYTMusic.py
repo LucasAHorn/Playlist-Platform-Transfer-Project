@@ -28,4 +28,4 @@ def getSongs(playlistUrl):
     print(f"\t{songCounter} songs total")
 
 # Main run here
-getSongs("https://music.youtube.com/playlist?list=RDCLAK5uy_kaYR5k7pkTcxU8A6Tgz0Z4ikrAF2uTIiU")
+# getSongs("https://music.youtube.com/playlist?list=RDCLAK5uy_kaYR5k7pkTcxU8A6Tgz0Z4ikrAF2uTIiU")
