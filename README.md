@@ -1,35 +1,23 @@
 # Playlist-Platform-Transfer-Project
 
-This project will:
+# Goal
 
-- transfer a playlist from spotify to youtube or youtube to spotify when completed
-- use authentication to improve user experience
-- require the playlist transfered to be a public playlist
+ - transfer playlists accurately from Youtube to Spotify and vice versa
 
-Important info:
+# Dependencies
 
-- only say SE/CE club at Iowa State
-- NEVER say Iowa State SE/CE club
-- there may need to be another page added to grab the token from the user
+ - node.js
+ - python
+     - packages: "ytmusicapi", "flask", and "flask-cors"
 
-How to run Project: **This will be updated over time**
+# How to Run
 
-- download node js
-- initialize npm and go to correct address
+ - Put the client secret in ____
+ - "npm install" in foler: PlaylistTransferProject
+ - ensure you have the python packages: "ytmusicapi", "flask", and "flask-cors"
 
-Function of SpotifyToYoutube:
 
-- create a youtube acct token
-- create new playlist for user
-- add songs from public spotify playlist to new playlist
-
-Function of YoutubeToSpotify:
-
-- create a Spotify acct token
-- create a new Spotify playlist
-- add songs from public Youtube playlist to new playlist
-
-Thank you to:
+# Contributors:
 
 - Alex Young (front-end)
 - Kevin Dillenburg 
