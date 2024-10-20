@@ -4,20 +4,27 @@ import "./app.css";
 function App() {
   const [playlistUrl, setPlaylistUrl] = useState("");
   const [token, setToken] = useState("");
+  const [name, setName] = useState("");
+
 
   /**
-   * Async function to handle YouTube to Spotify transfer.
+   * 
+   * @param APIEndpoint 
+   * @param bodyData 
    */
-  async function YoutubeToSpotify() {
+  async function serverInteractionHandling(APIEndpoint: string) {
 
-    // This tests is the input to url is "Lucas" and then prints it to terminal after a flask server checks for validity
+    const bodyData = JSON.stringify({ url: playlistUrl, name: name, token: token });
+
+    console.log(bodyData);
+
     try {
-      const response = await fetch('/api/YoutubeToSpotify', {  // Use correct API endpoint
+      const response = await fetch(APIEndpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name: playlistUrl }),  // Send the name to the backend
+        body: bodyData,
       });
 
       if (!response.ok) {
@@ -26,9 +33,8 @@ function App() {
 
       const data = await response.json();
 
-      // Check response data and log accordingly
       if (data.functionSuccess === 1) {
-        console.log("Data successfully sent and received");
+        console.log(data);
       } else {
         console.log("Data was wrong");
       }
@@ -40,14 +46,22 @@ function App() {
 
 
   /**
+   * Async function to handle YouTube to Spotify transfer.
+   */
+  async function YoutubeToSpotify() {
+    // give more data in the json object
+    serverInteractionHandling('/api/YTMusicToSpotify')
+  }
+
+
+  /**
    * This will be implimented later
   */
  function SpotifyToYoutube() {
-   console.log("Spotify to Youtube");
-   console.log(playlistUrl);
-   console.log(token);
-   // window.open("https://" + newPlaylistUrl, "_blank")?.focus(); // TODO: use this to open the playlist after it is made
+    // give more data in the json object
+    serverInteractionHandling('/api/SpotifyToYTMusic')
   }
+
 
   return (
     <div className="LandingArea">
@@ -56,26 +70,33 @@ function App() {
       <p>currently functional: NONE</p>
       <div>
         <form className="VerticallyAligned" onSubmit={(event) => event.preventDefault()}>
-          
           <div className="HorizontallyAligned">
             <p className="AnswerOptions" >Public playlist url: </p>
             <input
               className="AnswerOptions" 
               type="text"
-              name="playlistUrl"
-              placeholder="Enter a playlist link..."
+              placeholder="Enter playlist link"
               onChange={(event) => setPlaylistUrl(event.target.value)}
             ></input>
           </div>
-          
+
           <div className="HorizontallyAligned">
             <p className="AnswerOptions">Target Account Token: </p>
             <input
               className="AnswerOptions" 
               type="text"
-              name="playlistUrl"
               placeholder="Enter the target acct token"
               onChange={(event) => setToken(event.target.value)}
+            ></input>
+          </div>
+
+          <div className="HorizontallyAligned">
+            <p className="AnswerOptions">Optional new name: </p>
+            <input
+              className="AnswerOptions" 
+              type="text"
+              placeholder="Enter new playlist name"
+              onChange={(event) => setName(event.target.value)}
             ></input>
           </div>
 
@@ -87,7 +108,6 @@ function App() {
               Spotify to Youtube
             </button>
           </div>
-        
         </form>
       </div>
     </div>

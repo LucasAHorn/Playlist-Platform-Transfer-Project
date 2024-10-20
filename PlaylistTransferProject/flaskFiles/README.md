@@ -1,5 +1,6 @@
 # YTMusic Documentation
  - https://ytmusicapi.readthedocs.io/en/stable/index.html
+ - https://spotipy.readthedocs.io/en/2.24.0/index.html
 
 # Function of SpotifyToYoutube:
 
@@ -7,7 +8,7 @@
 - create new playlist for user
 - add songs from public spotify playlist to new playlist
 
-Function of YoutubeToSpotify:
+# Function of YoutubeToSpotify:
 
 - get sent acct token
 - create a new Spotify playlist
