@@ -1,6 +1,6 @@
-# YTMusic Documentation
- - https://ytmusicapi.readthedocs.io/en/stable/index.html
- - https://spotipy.readthedocs.io/en/2.24.0/index.html
+# Package Documentation
+ - YTMisicAPI:  https://ytmusicapi.readthedocs.io/en/stable/index.html
+ - Spotipy:     https://spotipy.readthedocs.io/en/2.24.0/index.html
 
 # Function of SpotifyToYoutube:
 

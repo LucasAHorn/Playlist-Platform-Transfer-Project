@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./app.css";
 
+// Future goal: parse url to get cite playlist is from, and user presses a button that determines where they send new playlist to
 function App() {
   const [playlistUrl, setPlaylistUrl] = useState("");
   const [token, setToken] = useState("");
@@ -45,18 +46,11 @@ function App() {
   }
 
 
-  /**
-   * Async function to handle YouTube to Spotify transfer.
-   */
   async function YoutubeToSpotify() {
     // give more data in the json object
     serverInteractionHandling('/api/YTMusicToSpotify')
   }
 
-
-  /**
-   * This will be implimented later
-  */
  function SpotifyToYoutube() {
     // give more data in the json object
     serverInteractionHandling('/api/SpotifyToYTMusic')
