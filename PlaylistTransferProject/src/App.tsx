@@ -80,7 +80,7 @@ function App() {
               className="AnswerOptions" 
               type="text"
               placeholder="Enter the target acct token"
-              onChange={(event) => setToken(event.target.value)}
+              onChange={(event) => setToken(event.target.value)}    // do not need the token
             ></input>
           </div>
 

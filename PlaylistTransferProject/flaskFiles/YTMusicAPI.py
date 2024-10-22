@@ -1,5 +1,6 @@
 from flask import jsonify
 from ytmusicapi import YTMusic
+import Creds
 
 
 # This cleans the YT title to make it more clear
@@ -17,11 +18,13 @@ def getYTSongs(playlistUrl):
     playlist_id = playlistUrl.split("list=")[1].split("&playnext=")[0].split("&feature=")[0]
     dictOfPlaylist = ytmusic.get_playlist(playlist_id)
 
+    songCounter = 0
     songs_data = []
 
     if "tracks" in dictOfPlaylist:
         for track in dictOfPlaylist["tracks"]:
-                               
+            songCounter += 1
+            
             title = cleanTitle(track["title"])
             artists = [artist["name"] for artist in track["artists"]]
 
@@ -30,28 +33,26 @@ def getYTSongs(playlistUrl):
                 "artists": artists
             })
     
+    print(songCounter)
     return songs_data
 
 
-def makeYTPlaylist(songs_data, playlistName, token):
-        
-    missingSongs = []
+def makeYTPlaylist(songs_data, playlistName):
 
+    projectNumber, Project_ID = Creds.getYTMusicCreds()
 
-    # testing return values
-    missingSongs.append({
-        "title": "Life is a Highway",
-        "artists": ["Rascal Flatts"]
-    })
-    missingSongs.append({
-        "title": "Shape of You",
-        "artists": ["Ed Sheeran"]
-    })
+    # get auth 
+    
+    # make new playlist
+
+    # add songs to playlist
+
+    missingSongs = [] # contains a song and artists
 
     return jsonify({"functionSuccess": 1, "missingSongs": missingSongs})
 
 
 # Main run here for testing purposes
-# print(getYTSongs("https://music.youtube.com/playlist?list=RDCLAK5uy_kaYR5k7pkTcxU8A6Tgz0Z4ikrAF2uTIiU"))
+# getYTSongs("https://music.youtube.com/playlist?list=PLa6ha0nfwU7oRjrzqgcCNMQoMpgjrpPh0")
 # 
 # potential url: https://music.youtube.com/playlist?list=RDCLAK5uy_m0U8h6HP_YFe0riaCUUWx9fMXCVPGxlso&playnext=1&feature=shared

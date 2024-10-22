@@ -13,12 +13,14 @@ def getData():
         data = request.get_json()
         return data['url'], data['name'], data['token']
 
+
 # Checks if there are obvious errors
 def checkAPIForErrors(url, token, isSpotifyToken):
     if not (url):
         return jsonify({"functionSuccess": 0, "errorMessage": "url is invalid"})
     if not (token):     # TODO: make a better check here for if it is a valid token
         return jsonify({"functionSuccess": 0, "errorMessage": "token is invalid"})
+
     
 # Gives an unnamed playlist a name
 def giveRandomName():

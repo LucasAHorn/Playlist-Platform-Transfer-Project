@@ -3,7 +3,6 @@ from spotipy.oauth2 import SpotifyOAuth, SpotifyClientCredentials
 import spotipy, Creds, os
 
 
-
 # Clears the token cache
 def clear_token_cache():
     cache_path = ".cache"
@@ -14,9 +13,7 @@ def clear_token_cache():
         print("No token cache found.")  
 
 
-
 def getSpotifySongs(playlistUrl):
-
     client_id, client_secret, _ = Creds.getSpotifyCreds()
 
     # Use Client Credentials Flow (no user authentication required)
@@ -25,71 +22,84 @@ def getSpotifySongs(playlistUrl):
 
     playlist_id = playlistUrl.split("/")[-1].split("?")[0]
 
+    # Get the playlist details
     playlist = spotify.playlist(playlist_id=playlist_id)
 
     songs_data = []
+    counter = 0
 
-    # Loop through the tracks in the playlist
-    for item in playlist['tracks']['items']:
-        track = item['track']
-        song_name = track['name']  # Get the song name
-        artists = [artist["name"] for artist in track["artists"]]
+    # Fetch the first set of tracks
+    tracks = playlist['tracks']
+    items = tracks['items']
 
-        songs_data.append({
-            "title": song_name,
-            "artists": artists,
-        })
-    
+    # Loop through tracks and handle pagination
+    while tracks:
+        for item in items:
+            counter += 1
+            track = item['track']
+            song_name = track['name']
+            artists = [artist["name"] for artist in track["artists"]]
 
-    #issue with jsonifying
-    print(songs_data)
+            songs_data.append({
+                "title": song_name,
+                "artists": artists,
+            })
 
+        # Check if there is another page of tracks
+        if tracks['next']:
+            tracks = spotify.next(tracks)
+            items = tracks['items']
+        else:
+            tracks = None
+
+    print(f"{counter} songs in playlist {playlist['name']}")
     return songs_data
+
 
 
 # TODO: remove token as input from all function calls
 # Should return a json of missing songs + artist and if it was successsful (1=good, 0=bad)
 # example: {"functionSuccess": 1, "MissingSongs:" missingSongs} | {"functionSuccess": 0, error: "error description"}
-def createPlaylist(jsonNameAndArtists, playlistName, token):
-
-
-    
+def createPlaylist(NameAndArtists, playlistName, token): 
     client_id, client_secret, redirect_uri = Creds.getSpotifyCreds()
-    scope = 'user-library-read'
+    scope = 'playlist-modify-public user-library-read'
 
-    # Authenticate and get token using OAuth
     sp_oauth = SpotifyOAuth(client_id=client_id, 
                             client_secret=client_secret,
                             redirect_uri=redirect_uri, 
                             scope=scope)
 
-    # Get access token
     token_info = sp_oauth.get_access_token(as_dict=False)
 
     sp = spotipy.Spotify(auth=token_info)
 
-    # Example API call: Get the current user’s profile
     user_profile = sp.me()
-    # print(user_profile)
-    print(user_profile['type'] + ': ' + user_profile['display_name'] + ' created playlist: ' + playlistName)
 
-    # spotify = spotipy.Spotify() # TODO: auth with client and user secret
+    # Create a playlist - TODO: make sure user does not already have a playlist of same name
+    playlist = sp.user_playlist_create(user=user_profile['id'], name=playlistName)
 
-    #  Below this just returns
     missingSongs = []
+    song_uris = []
 
-    # testing return values
-    missingSongs.append({
-        "title": "Gangnam Style",
-        "artists": ["PSY"]
-    })
-    missingSongs.append({
-        "title": "FE!N (feat. Playboi Carti)",
-        "artists": ["Travis Scott", "Playboi Carti"]
-    })
+    for song in NameAndArtists:
+        query = f"{song['title']} {song['artists']}"
+        result = sp.search(q=query, type='track', limit=1)
+        
+        if result['tracks']['items']:
+            track_uri = result['tracks']['items'][0]['uri']
+            song_uris.append(track_uri)
+        else:
+            missingSongs.append(song)
 
+    # Add songs to the created playlist
+    if song_uris:
+        sp.playlist_add_items(playlist_id=playlist['id'], items=song_uris)
+
+    print(f"{user_profile['type']}: {user_profile['display_name']} created playlist: {playlistName}")
+    
     clear_token_cache()
-    return jsonify({"functionSuccess": 1, "missingSongs": missingSongs})
+    # return jsonify({"functionSuccess": 1, "missingSongs": missingSongs})
+    print(missingSongs)
 
 
 
@@ -97,4 +107,13 @@ def createPlaylist(jsonNameAndArtists, playlistName, token):
 # getSpotifySongs("https://open.spotify.com/playlist/4EYl9HFmiXMSAJzLIX3Wx3?si=b9ab3fc310694c48"
 # createPlaylist("", "", "")
 
-getSpotifySongs("https://open.spotify.com/playlist/6v8okK8zzs0UXxBX90ecqB")
+# getSpotifySongs("https://open.spotify.com/playlist/6v8okK8zzs0UXxBX90ecqB")
+# getSpotifySongs("https://open.spotify.com/playlist/4EYl9HFmiXMSAJzLIX3Wx3")
+
+# Testing adding a song (odd results, should try to improve)
+# song_info = []
+# song_info.append({
+#     "title": "Fein",
+#     "artists": "Weezer",
+# })
+# createPlaylist(song_info, "weezed", "")

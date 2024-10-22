@@ -9,16 +9,20 @@
      - packages: "ytmusicapi", "spotipy", "flask", and "flask-cors"
 
 # How to Run
- - Put the client secret in ____
- - "npm install" in foler: PlaylistTransferProject
- - ensure you have the python packages: "ytmusicapi", "flask", and "flask-cors"
-
+ - Setup:
+    - Put the client secret in flaskFiles/Creds.py
+    - "npm install" in foler: PlaylistTransferProject
+    - Ensure you have the python packages: "ytmusicapi", "spotipy", "flask", and "flask-cors"
+ - to Run:
+    - run "flaskFiles/TransferPlaylistMain.py"
+    - change directory to "PlaylistTransferProject"
+    - npm run dev
 
 # Contributors:
-- Alex Young (front-end)
-- Kevin Dillenburg 
-- <name here>
-- <name here>
-- <name here>
-- <name here>
-- <name here>
+ - Alex Young (front-end)
+ - Kevin Dillenburg 
+ - <name here>
+ - <name here>
+ - <name here>
+ - <name here>
+ - <name here>
