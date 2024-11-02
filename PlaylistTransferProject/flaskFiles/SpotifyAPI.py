@@ -10,7 +10,30 @@ def clear_token_cache():
         os.remove(cache_path)
         print("Token cache cleared.")
     else:
-        print("No token cache found.")  
+        print("No token cache found.")
+        
+
+# Checks to see if the words contain half of the same words
+# TODO: impliment only if needed
+# def isSameSong(song1Name, song2Name):
+#     song1Words = song1Name.split(" ")
+#     song2Words = song2Name.split(" ")
+
+#     if len(song1Words) > len(song1Words):
+#         temp = song1Words
+#         song1Words = song2Words
+#         song2Words = temp
+
+#     numWordsSimilar = 0
+#     for word in song1Words:
+#         if word in song1Words:
+#             numWordsSimilar += 1
+
+#     if numWordsSimilar > len(song1Words):
+#         return True
+    
+#     return False
+
 
 
 def getSpotifySongs(playlistUrl):
@@ -52,7 +75,7 @@ def getSpotifySongs(playlistUrl):
         else:
             tracks = None
 
-    print(f"{counter} songs in playlist {playlist['name']}")
+    # print(f"{counter} songs in playlist {playlist['name']}") TODO: remove line after testing
     return songs_data
 
 
@@ -60,7 +83,7 @@ def getSpotifySongs(playlistUrl):
 # TODO: remove token as input from all function calls
 # Should return a json of missing songs + artist and if it was successsful (1=good, 0=bad)
 # example: {"functionSuccess": 1, "MissingSongs:" missingSongs} | {"functionSuccess": 0, error: "error description"}
-def createPlaylist(NameAndArtists, playlistName, token): 
+def createPlaylist(NameAndArtists, playlistName): 
     client_id, client_secret, redirect_uri = Creds.getSpotifyCreds()
     scope = 'playlist-modify-public user-library-read'
 
@@ -75,7 +98,6 @@ def createPlaylist(NameAndArtists, playlistName, token):
 
     user_profile = sp.me()
 
-    # Create a playlist - TODO: make sure user does not already have a playlist of same name
     playlist = sp.user_playlist_create(user=user_profile['id'], name=playlistName)
 
     missingSongs = []
@@ -91,7 +113,7 @@ def createPlaylist(NameAndArtists, playlistName, token):
         else:
             missingSongs.append(song)
 
-    # Add songs to the created playlist
+
     if song_uris:
         sp.playlist_add_items(playlist_id=playlist['id'], items=song_uris)
 

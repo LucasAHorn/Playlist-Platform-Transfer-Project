@@ -1,23 +1,15 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import "./app.css";
+import Message from "./Message"; // Import Message component
 
-// Future goal: parse url to get cite playlist is from, and user presses a button that determines where they send new playlist to
 function App() {
   const [playlistUrl, setPlaylistUrl] = useState("");
-  const [token, setToken] = useState("");
   const [name, setName] = useState("");
+  const [message, setMessage] = useState<string | null>(null);
+  const [isSuccess, setIsSuccess] = useState(false);
 
-
-  /**
-   * 
-   * @param APIEndpoint 
-   * @param bodyData 
-   */
   async function serverInteractionHandling(APIEndpoint: string) {
-
-    const bodyData = JSON.stringify({ url: playlistUrl, name: name, token: token });
-
-    console.log(bodyData);
+    const bodyData = JSON.stringify({ url: playlistUrl, name: name });
 
     try {
       const response = await fetch(APIEndpoint, {
@@ -35,27 +27,31 @@ function App() {
       const data = await response.json();
 
       if (data.functionSuccess === 1) {
-        console.log(data);
+        setMessage("Operation was successful!");
+        setIsSuccess(true);
       } else {
-        console.log("Data was wrong");
+        setMessage("Data was wrong");
+        setIsSuccess(false);
       }
-
     } catch (error) {
-      console.log('Error:', error);
+      console.log(error)
     }
   }
 
 
-  async function YoutubeToSpotify() {
-    // give more data in the json object
-    serverInteractionHandling('/api/YTMusicToSpotify')
+  // TODO: implement a way to make the button have a 5 sec delay between uses
+  async function ToSpotify() {
+    serverInteractionHandling('/api/ToSpotify');
   }
 
- function SpotifyToYoutube() {
-    // give more data in the json object
-    serverInteractionHandling('/api/SpotifyToYTMusic')
+  async function ToYoutube() {
+    serverInteractionHandling('/api/ToYTMusic');
   }
 
+  async function Testing(success:boolean) {
+    console.log('/Testing/' + success);
+    serverInteractionHandling('/Testing/' + success);
+  }
 
   return (
     <div className="LandingArea">
@@ -65,46 +61,50 @@ function App() {
       <div>
         <form className="VerticallyAligned" onSubmit={(event) => event.preventDefault()}>
           <div className="HorizontallyAligned">
-            <p className="AnswerOptions" >Public playlist url: </p>
+            <p className="AnswerOptions">Public playlist url:</p>
             <input
-              className="AnswerOptions" 
+              className="AnswerOptions"
               type="text"
               placeholder="Enter playlist link"
               onChange={(event) => setPlaylistUrl(event.target.value)}
-            ></input>
+            />
           </div>
 
           <div className="HorizontallyAligned">
-            <p className="AnswerOptions">Target Account Token: </p>
+            <p className="AnswerOptions">Optional new playlist name:</p>
             <input
-              className="AnswerOptions" 
-              type="text"
-              placeholder="Enter the target acct token"
-              onChange={(event) => setToken(event.target.value)}    // do not need the token
-            ></input>
-          </div>
-
-          <div className="HorizontallyAligned">
-            <p className="AnswerOptions">Optional new name: </p>
-            <input
-              className="AnswerOptions" 
+              className="AnswerOptions"
               type="text"
               placeholder="Enter new playlist name"
               onChange={(event) => setName(event.target.value)}
-            ></input>
+            />
           </div>
 
           <div className="HorizontallyAligned">
-            <button className="AnswerOptions" type="button" onClick={() => YoutubeToSpotify()}>
-              Youtube to Spotify
+            <button className="AnswerOptions" type="button" onClick={() => ToSpotify()}>
+              To Spotify
             </button>
-            <button className="AnswerOptions" type="button" onClick={() => SpotifyToYoutube()}>
-              Spotify to Youtube
+            <button className="AnswerOptions" type="button" onClick={() => ToYoutube()}>
+              To Youtube Music
             </button>
           </div>
+
+          <div className="HorizontallyAligned">
+            <button className="AnswerOptions" type="button" onClick={() => Testing(true)}>
+              Test Success
+            </button>
+            <button className="AnswerOptions" type="button" onClick={() => Testing(false)}>
+              Test Failure
+            </button>
+          </div>
+
         </form>
+
+        {/* Display message if available */}
+        {message && <Message text={message} success={isSuccess} />}
       </div>
     </div>
   );
 }
+
 export default App;

@@ -18,7 +18,7 @@ def getYTSongs(playlistUrl):
     playlist_id = playlistUrl.split("list=")[1].split("&playnext=")[0].split("&feature=")[0]
     dictOfPlaylist = ytmusic.get_playlist(playlist_id)
 
-    songCounter = 0
+    # songCounter = 0 TODO: delete after testing
     songs_data = []
 
     if "tracks" in dictOfPlaylist:
@@ -33,7 +33,7 @@ def getYTSongs(playlistUrl):
                 "artists": artists
             })
     
-    print(songCounter)
+    # print(songCounter) TODO: delete after done testing
     return songs_data
 
 
