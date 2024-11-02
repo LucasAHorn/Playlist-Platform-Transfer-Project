@@ -1,24 +1,25 @@
-import React, { useState } from 'react';
-import './Message.css';
+import React from "react";
+import "./Message.css";
 
 interface MessageProps {
-  text: string;
+  text: string | null;
+  playlistName: string | null;
   success: boolean;
+  onDismiss: () => void;
 }
 
-const Message: React.FC<MessageProps> = ({ text, success }) => {
-  const [visible, setVisible] = useState(true);
-
-  const handleClose = () => {
-    setVisible(false);
-  };
-
-  if (!visible) return null;
-
-  return (
-    <div className={`message ${success ? 'success' : 'error'}`}>
-      <span>{text}</span>
-      <button className="close-button" onClick={handleClose}>
+const Message: React.FC<MessageProps> = ({ text, playlistName, success, onDismiss }) => {
+  return success ? (
+    <div className="MessageSuccess">
+      <p>Successfully created playlist: {playlistName}</p>
+      <button className="dismiss-button" onClick={onDismiss}>
+        &times;
+      </button>
+    </div>
+  ) : (
+    <div className="MessageError">
+      <p>{text}</p>
+      <button className="dismiss-button" onClick={onDismiss}>
         &times;
       </button>
     </div>

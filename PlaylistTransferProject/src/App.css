@@ -1,26 +1,33 @@
 body {
-    display: flex;
-    justify-content: center;
-    height: 100vh;
     margin: 0;
-}
-
-    .LandingArea {
-    margin-right: auto;
-    margin-left: auto;
-}
-
-    .HorizontallyAligned {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    min-width: 320px;
+    min-height: 100vh;
+    background-color: #242424;
+    color: rgba(255, 255, 255, 0.87);
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  }
+  
+  .LandingArea {
+    width: 100%;
+    max-width: 800px; /* Control the max width */
+    padding: 2rem;
+    text-align: center; /* Center text within LandingArea */
+  }
+  
+  .HorizontallyAligned {
     display: flex;
     flex-direction: row;
     justify-content: center;
-}
-
-.VerticallyAligned {
+  }
+  
+  .VerticallyAligned {
     display: flex;
     flex-direction: column;
-}
-
-.AnswerOptions {
+  }
+  
+  .AnswerOptions {
     margin: 1vh;
-}
+  }
+  

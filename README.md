@@ -11,7 +11,7 @@
 # How to Run
  - Setup:
     - Put the client secret in flaskFiles/Creds.py
-    - "npm install" in foler: PlaylistTransferProject
+    - "npm install" in folder: PlaylistTransferProject
     - Ensure you have the python packages: "ytmusicapi", "spotipy", "flask", and "flask-cors"
  - to Run:
     - run "flaskFiles/TransferPlaylistMain.py"

@@ -17,10 +17,12 @@ def getData():
 # This will find what the starting platform is
 #returns: boolean, songlist
 def getSongs(url):
-    if(url.index("spotify.com") != -1):
+    if(url.find("spotify.com") > -1):
+        print("from a spotify playlist")
         return True, SpotifyAPI.getSpotifySongs(url)
 
-    if(url.index("music.youtube.com")):
+    if(url.find("music.youtube.com") > -1):
+        print("from a YT music playlist")
         return True, YTMusicAPI.getYTSongs(url)
 
     return False, ""
@@ -41,14 +43,16 @@ def YTMusicToSpotify():
         return jsonify({"functionSuccess": 0, "errorMessage": "Error getting songs"})
 
 
-    if not fnSuccess:
+    if fnSuccess == False:
         return jsonify({"functionSuccess": 0, "errorMessage": "given playlist could not be reached"})
     
     if not name:
         name = giveRandomName()
     
     try:
-        return SpotifyAPI.createPlaylist(song_data, name)
+        missingSongs = SpotifyAPI.createPlaylist(song_data, name)   # TODO: look into this:
+                                                                    # HTTP Error for POST to https://api.spotify.com/v1/playlists/1bqCeOySqMaQg3nBom6Lhu/tracks with Params: {'position': None} returned 400 due to Too many ids requested
+        return jsonify({"functionSuccess": 1, "missingSongs": "missingSongs", "name": name})
     except:
         return jsonify({"functionSuccess": 0, "errorMessage": "Error creating playlist"})
 
@@ -62,25 +66,27 @@ def SpotifyToYTMusic():
     except:
         return jsonify({"functionSuccess": 0, "errorMessage": "Error getting songs"})
 
-    if not fnSuccess:
+    if fnSuccess == False:
         return jsonify({"functionSuccess": 0, "errorMessage": "given playlist could not be reached"})
 
     if not name:
         name = giveRandomName()
 
     try:    
-        return YTMusicAPI.makeYTPlaylist(songs_data, name)
+        missingSongs = YTMusicAPI.makeYTPlaylist(songs_data, name)
+        return jsonify({"functionSuccess": 1, "missingSongs": missingSongs, "name": name})
     except:
         return jsonify({"functionSuccess": 0, "errorMessage": "Error creating playlist"})
 
 # TESTING  -- TODO REMOVE LATER
-@app.route('/Testing/false')
-def testFalse():
-    return jsonify({"functionSuccess": 1, missingSongs:"lalala - use proper formatting"})
+@app.route('/api/false', methods=['POST'])
+def testFalse():    
+    return jsonify({"functionSuccess": 0, "errorMessage": "lalala error"})
 
-@app.route('/Testing/true')
+
+@app.route('/api/true', methods=['POST'])
 def testTrue():
-    return jsonify({"functionSuccess": 1, "errorMessage": "lalala error"})
+    return jsonify({"functionSuccess": 1, "errorMessage": "lalala no error", "name": "cheeseBorger"})
 
 
 

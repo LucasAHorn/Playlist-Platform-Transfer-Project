@@ -1,56 +1,74 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./app.css";
 import Message from "./Message"; // Import Message component
 
+interface Message {
+  id: number;
+  text: string | null;
+  playlistName: string | null;
+  success: boolean;
+}
+
 function App() {
-  const [playlistUrl, setPlaylistUrl] = useState("");
-  const [name, setName] = useState("");
-  const [message, setMessage] = useState<string | null>(null);
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [playlistUrl, setPlaylistUrl] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [messages, setMessages] = useState<Message[]>([]);
+
+  function addMessage(text: string | null, isSuccess: boolean, playlistName: string | null) {
+    const newMessage: Message = {
+      id: Date.now(),
+      text,
+      playlistName,
+      success: isSuccess,
+    };
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+  }
+
+  function dismissMessage(id: number) {
+    setMessages((prevMessages) => prevMessages.filter((message) => message.id !== id));
+  }
 
   async function serverInteractionHandling(APIEndpoint: string) {
-    const bodyData = JSON.stringify({ url: playlistUrl, name: name });
+    const bodyData = JSON.stringify({ url: playlistUrl, name });
 
     try {
       const response = await fetch(APIEndpoint, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: bodyData,
       });
 
       if (!response.ok) {
-        throw new Error('Request failed');
+        console.log(response);
+        throw new Error("Request failed");
       }
 
       const data = await response.json();
 
       if (data.functionSuccess === 1) {
-        setMessage("Operation was successful!");
-        setIsSuccess(true);
+        addMessage(null, true, data.name);
       } else {
-        setMessage("Data was wrong");
-        setIsSuccess(false);
+        addMessage(data.errorMessage, false, null);
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
+      addMessage("An error occurred while processing the request.", false, null);
     }
   }
 
-
-  // TODO: implement a way to make the button have a 5 sec delay between uses
   async function ToSpotify() {
-    serverInteractionHandling('/api/ToSpotify');
+    serverInteractionHandling("/api/ToSpotify");
   }
 
   async function ToYoutube() {
-    serverInteractionHandling('/api/ToYTMusic');
+    serverInteractionHandling("/api/ToYTMusic");
   }
 
-  async function Testing(success:boolean) {
-    console.log('/Testing/' + success);
-    serverInteractionHandling('/Testing/' + success);
+  async function Testing(success: boolean) {
+    console.log("/Testing/" + success);
+    serverInteractionHandling("/api/" + success);
   }
 
   return (
@@ -97,11 +115,20 @@ function App() {
               Test Failure
             </button>
           </div>
-
         </form>
 
-        {/* Display message if available */}
-        {message && <Message text={message} success={isSuccess} />}
+        {/* Display messages */}
+        <div className="Messages">
+          {messages.map((msg) => (
+            <Message
+              key={msg.id}
+              text={msg.text}
+              success={msg.success}
+              playlistName={msg.playlistName}
+              onDismiss={() => dismissMessage(msg.id)}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
