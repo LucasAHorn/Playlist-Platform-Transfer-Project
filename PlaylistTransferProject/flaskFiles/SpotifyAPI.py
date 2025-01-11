@@ -1,4 +1,3 @@
-from flask import jsonify
 from spotipy.oauth2 import SpotifyOAuth, SpotifyClientCredentials
 import spotipy, Creds, os
 
@@ -11,7 +10,7 @@ def clear_token_cache():
         print("Token cache cleared.")
     else:
         print("No token cache found.")
-        
+
 
 # Checks to see if the words contain half of the same words
 # TODO: impliment only if needed
@@ -33,7 +32,6 @@ def clear_token_cache():
 #         return True
     
 #     return False
-
 
 
 def getSpotifySongs(playlistUrl):
@@ -79,7 +77,6 @@ def getSpotifySongs(playlistUrl):
     return songs_data
 
 
-
 # TODO: remove token as input from all function calls
 # Should return a json of missing songs + artist and if it was successsful (1=good, 0=bad)
 # example: {"functionSuccess": 1, "MissingSongs:" missingSongs} | {"functionSuccess": 0, error: "error description"}
@@ -105,24 +102,24 @@ def createPlaylist(NameAndArtists, playlistName):
 
     for song in NameAndArtists:
         query = f"{song['title']} {song['artists']}"
-        result = sp.search(q=query, type='track', limit=1)
-        
+        print(query)
+        result = sp.search(q=query, type='track', limit=1) # TODO: Find a way to get the top 3 - 5 tracks (start with 1)
+        print(result)
+
         if result['tracks']['items']:
             track_uri = result['tracks']['items'][0]['uri']
             song_uris.append(track_uri)
         else:
             missingSongs.append(song)
 
-
     if song_uris:
         sp.playlist_add_items(playlist_id=playlist['id'], items=song_uris)
 
-    print(f"{user_profile['type']}: {user_profile['display_name']} created playlist: {playlistName}")
+    # print(f"{user_profile['type']}: {user_profile['display_name']} created playlist: {playlistName}") TODO remove this when done testing
     
     clear_token_cache()
     # return jsonify({"functionSuccess": 1, "missingSongs": missingSongs})
     print(missingSongs)
-
 
 
 # for testing purposes

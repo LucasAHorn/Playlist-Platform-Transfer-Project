@@ -1,7 +1,7 @@
 # Playlist-Platform-Transfer-Project
 
 # Goal
- - transfer playlists accurately from Youtube to Spotify and vice versa
+ - transfer playlists accurately from multiple platfroms to Spotify
 
 # Dependencies
  - node.js
@@ -21,7 +21,7 @@
 # Contributors:
  - Alex Young (front-end)
  - Kevin Dillenburg 
- - <name here>
+ - Lucas Horn
  - <name here>
  - <name here>
  - <name here>

@@ -28,6 +28,8 @@ def getYTSongs(playlistUrl):
             title = cleanTitle(track["title"])
             artists = [artist["name"] for artist in track["artists"]]
 
+            artists = ', '.join(artists)
+
             songs_data.append({
                 "title": title,
                 "artists": artists
@@ -35,21 +37,6 @@ def getYTSongs(playlistUrl):
     
     print(songCounter) # TODO: delete after done testing
     return songs_data
-
-
-def makeYTPlaylist(songs_data, playlistName):
-
-    projectNumber, Project_ID = Creds.getYTMusicCreds()
-
-    # get auth 
-    
-    # make new playlist
-
-    # add songs to playlist
-
-    missingSongs = [] # contains a song and artists
-
-    return missingSongs
 
 
 # Main run here for testing purposes

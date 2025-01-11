@@ -1,4 +1,4 @@
-# Favorite ice cream flavor
+# Favorite ice cream flavor (Top Secret)
 
 # This will return the spotify credentials 
 # returns: client_id, client_secret, redurect_uri

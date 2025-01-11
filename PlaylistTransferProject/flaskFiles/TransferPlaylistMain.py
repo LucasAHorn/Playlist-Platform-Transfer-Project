@@ -7,6 +7,7 @@ import random
 app = Flask(__name__)
 CORS(app)
 
+
 # Gets data from browser
 # Outputs url, name, token
 def getData():
@@ -26,10 +27,11 @@ def getSongs(url):
         return True, YTMusicAPI.getYTSongs(url)
 
     return False, ""
-    
+
+
 # Gives an unnamed playlist a name
 def giveRandomName():
-    return f"RenameMe{random.randint(100000000, 1000000000)}"
+    return "Unnamed Playlist"
 
 
 # Transfers playlist to Spotify
@@ -41,7 +43,6 @@ def YTMusicToSpotify():
         fnSuccess, song_data = getSongs(url)
     except:
         return jsonify({"functionSuccess": 0, "errorMessage": "Error getting songs"})
-
 
     if fnSuccess == False:
         return jsonify({"functionSuccess": 0, "errorMessage": "given playlist could not be reached"})
@@ -55,6 +56,7 @@ def YTMusicToSpotify():
         return jsonify({"functionSuccess": 1, "missingSongs": "missingSongs", "name": name})
     except:
         return jsonify({"functionSuccess": 0, "errorMessage": "Error creating playlist"})
+
 
 # Transfers a playlist to YT
 @app.route('/api/ToYTMusic', methods=['POST'])
@@ -78,6 +80,7 @@ def SpotifyToYTMusic():
     except:
         return jsonify({"functionSuccess": 0, "errorMessage": "Error creating playlist"})
 
+
 # TESTING  -- TODO REMOVE LATER
 @app.route('/api/false', methods=['POST'])
 def testFalse():    
@@ -86,8 +89,7 @@ def testFalse():
 
 @app.route('/api/true', methods=['POST'])
 def testTrue():
-    return jsonify({"functionSuccess": 1, "errorMessage": "lalala no error", "name": "cheeseBorger"})
-
+    return jsonify({"functionSuccess": 1, "name": "cheeseBorger"})
 
 
 app.run(host="127.0.0.1", port="5000")
