@@ -53,9 +53,8 @@ function App() {
   return (
     <div className="LandingArea">
       <h1>Playlist Transfer Project</h1>
-      <p>This website will transfer a public playlist to another platform</p>
-      <h2>Functionality</h2>
-      <p>smaller playlists: spotify</p>
+      <p>This website will transfer a YouTube Music playlist to Spotify</p>
+      <h2>Functional: smaller playlists</h2>
       <div>
         <form className="VerticallyAligned" onSubmit={ToSpotify}>
           <div className="HorizontallyAligned">
