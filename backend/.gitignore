@@ -1,3 +1,4 @@
 # Contains all secrets that should not be public (like my favorate ice cream flavor)
 Creds.py
 Testing.py
+__pycache__
